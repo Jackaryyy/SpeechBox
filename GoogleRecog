@@ -1,0 +1,41 @@
+import speech_recognition as sr
+
+# obtain path to "english.wav" in the same folder as this script
+from os import path
+AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
+# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "french.aiff")
+# AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "chinese.flac")
+
+# use the audio file as the audio source
+r = sr.Recognizer()
+with sr.AudioFile(AUDIO_FILE) as source:
+    audio = r.record(source)  # read the entire audio file
+
+## obtain audio from the microphone
+#r = sr.Recognizer()
+#with sr.Microphone() as source:
+#    print("Say something!")
+#    audio = r.listen(source)
+
+# recognize speech using Google Cloud Speech
+GOOGLE_CLOUD_SPEECH_CREDENTIALS =  r"""{
+  "type": "service_account",
+  "project_id": "glass-genius-196220",
+  "private_key_id": "2f8fdcefcf25d9bfb732e561316be2b5b5588171",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCijK1oOFcZj0vc\nlFPV2R2oMYAUV75P8KEQuwwuJWcz33sZRaDhmdUhVM+cdv/k3qyNtLQGZ4SEgGRh\nrtzepcEer+MhdzUiQvnYZoaxoe6hHIM9O8sHHx1bAmyXiuIyjj+fnf68TumGVWNH\n+67NVM2JOn++6e1ZsNFIc68uqJbYLhJu4ZYyTkTeDxTIY3AvkQ4JZaWKTw7mo/ol\nH/1TIqZFnrQA/kwrCw4CGpcedKXQw5gBmYPtG7rrct72a7gq7BcheKBaSOnkwAs0\n9cbjpH2mnuXwHzL0+QdcaSb23UQZz3CIek+px7uWA08SiKouGw7OxYm+39mi0jSc\ndIDGTLVbAgMBAAECggEAQfyCvp60eQtLXAmYuOSxHeCuYlO2TcRc1ipgiPElIpEz\n6y/xXfPxad0AhL9oJRRiDwqO1FS8nn9ygJcYUYgPTDJRrXmzh6uRuk/wmPaoJR4q\nhraZtlPiulnTFHfMWIKXgGgGi5IrSZ2rNoMM1Iz6/RzS1AEpmbHmW5eew32r8qim\noc9E+kpMV1QaM90q0Ma7ol87x8TPP7yJLw0oSs+Xq/z1pgIwfun0YZznhgk6XG30\n907b/oJsy1+t8qdx7TW2BLNzXhVbXNh0g1ODqsTe6JaRt+zyz76TPaZbc3sFYZAW\nL2pzqERlM7cG6aBXrfg5HPXh1jWoTx9iwqM0VyAPIQKBgQDkfTjYZ6nktnty6AMl\ndnNr/03Z+DwDXiQFQ+hKucsnro+XwoRIokycigNSwXIfOaq0BrTWhoKHWaKVxDTB\nbYFpjgmL6bopupIi/Zeq/552sRhfy2XvMOWFAxYpYvX+aPT1KYOshvmn4YaL1Ruz\nRdyCWP7bhzc9xjeA0w//wHzGoQKBgQC2HvtT9DBo21uiYI2RijmlDNxU+CN/zjAD\noBNCTjX/vJ02jVWBmfkuN59mKuEfWYF7ilnaAvpp+NEzpzNQ7y2EAgKojrUVBeZS\nhup+2Fdvod5HEsHK72g4bCPQyqyv+ERCSS1Kvf/4NnIaxhN/Oaaq2wX70Q87XYOf\nv2yRW8GGewKBgQDRmYmHAvlXxIpUKz+PoyxYergY5t1unXJfnh6+Rdd2DGzO43Jk\nCvZKd1R7Gtesi0LrqGdFj9i3fuNljbpzYhfgE5rwTTUoSGz8SjNSevELooNghP56\nQBmcPeubhZtxiSiEqVOP9bWZaon5RkIF32Vb8XXBPjXPpkCOHY/EpfgQYQKBgGmc\nu9iqsewM0S3v2gj9ZIJfW+J2Z3e1JUjk6mY4Hr5oLa819NEMbmEr5mcEFLruV9VB\nnOt9cKRFo2PV4T9dBEMaO1puL3q6ih9vl8rpQIM/FjyXFwTNIt4dcAOjlNMTINpj\nvz0pw6e4QyFdnm7YCtvn2ad3S+L8Ttkz1AzTbf3DAoGBAJxitrDplvdZmp0Kocli\nO5/lXsKgMf9lSpSu0RWGJUou94dIPbAry/cQS/I5MjYmFy+xQiYJwk+vVuKkwFVc\n6PhEd2qwVYBrZt9KBQ6h+mbL/VA3EgCxZ6YOkj7aL04AIaZBx+KExuFJ/Wlmgp6d\niPsqvWCOdwIFlsPxXVKrjFOZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "junjie@glass-genius-196220.iam.gserviceaccount.com",
+  "client_id": "104396336866508707121",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/junjie%40glass-genius-196220.iam.gserviceaccount.com"
+}
+"""
+try:
+    print("Google Cloud Speech thinks you said " + r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS))
+    f=open('content.txt','w')
+    f.write(r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS))
+except sr.UnknownValueError:
+    print("Google Cloud Speech could not understand audio")
+except sr.RequestError as e:
+    print("Could not request results from Google Cloud Speech service; {0}".format(e))
